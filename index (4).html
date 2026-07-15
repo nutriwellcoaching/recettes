@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ma bibliothèque de recettes — NutriWell</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,500&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --capucine:#DB6350;--capucine-fonce:#B84F3F;--ballerine:#ECB5B0;
+  --ballerine-soft:#F8E5E2;--creme:#FAF7F5;--brun:#2D2326;--brun-moyen:#6b5d60;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Open Sans',sans-serif;background:radial-gradient(120% 40% at 50% 0%,var(--ballerine-soft) 0%,var(--creme) 55%);color:var(--brun);min-height:100vh;padding-bottom:40px}
+.topband{height:8px;background:linear-gradient(90deg,var(--ballerine),var(--capucine),var(--capucine-fonce))}
+header{text-align:center;padding:42px 20px 10px}
+.brand{font-family:'Playfair Display',serif;font-weight:700;color:var(--capucine);font-size:14px;letter-spacing:.34em;text-transform:uppercase}
+.brand-sub{font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:var(--brun-moyen);margin-top:4px}
+h1{font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(34px,7vw,50px);margin:18px 0 6px;letter-spacing:-.5px}
+h1 em{color:var(--capucine);font-style:italic}
+.flower{color:var(--ballerine);font-size:15px;letter-spacing:.5em;margin-bottom:8px}
+.subtitle{font-size:15px;color:var(--brun-moyen);max-width:46ch;margin:0 auto}
+.controls{max-width:1100px;margin:28px auto 0;padding:0 20px}
+.search-wrap{position:relative;max-width:440px;margin:0 auto 20px}
+#search{width:100%;border:1.5px solid var(--ballerine);background:#fff;border-radius:99px;padding:14px 20px 14px 46px;font-family:inherit;font-size:15px;color:var(--brun)}
+#search:focus{outline:none;border-color:var(--capucine)}
+.search-wrap::before{content:"⌕";position:absolute;left:18px;top:50%;transform:translateY(-50%);color:var(--capucine);font-size:22px}
+.filters{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
+.filter{background:#fff;border:1.5px solid var(--ballerine-soft);color:var(--brun-moyen);font-family:inherit;font-size:13.5px;font-weight:600;padding:9px 16px;border-radius:99px;cursor:pointer;transition:all .16s}
+.filter:hover{border-color:var(--ballerine)}
+.filter.active{background:var(--capucine);color:#fff;border-color:var(--capucine)}
+.count{text-align:center;font-size:13px;color:var(--brun-moyen);margin:22px 0 6px;letter-spacing:.04em}
+.grid{max-width:1100px;margin:8px auto 0;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px}
+.card{background:#fff;border-radius:18px;overflow:hidden;text-decoration:none;color:inherit;box-shadow:0 12px 30px -22px rgba(184,79,63,.5);transition:transform .16s,box-shadow .16s;display:flex;flex-direction:column;border:1px solid #fff}
+.card:hover{transform:translateY(-4px);box-shadow:0 20px 40px -22px rgba(184,79,63,.6);border-color:var(--ballerine-soft)}
+.card-ill{background:linear-gradient(135deg,var(--ballerine-soft),#fff);height:120px;display:flex;align-items:center;justify-content:center;color:var(--capucine)}
+.card-ill svg{width:64px;height:64px}
+.card-body{padding:16px 18px 18px}
+.card-moment{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--capucine);font-weight:600;margin-bottom:5px}
+.card-title{font-family:'Playfair Display',serif;font-weight:600;font-size:19px;line-height:1.2;color:var(--brun);margin-bottom:10px}
+.card-tags{display:flex;flex-wrap:wrap;gap:5px}
+.ctag{font-size:10.5px;color:var(--brun-moyen);background:var(--creme);padding:3px 8px;border-radius:20px}
+.hidden{display:none}
+.noresult{text-align:center;color:var(--brun-moyen);padding:50px 20px;font-style:italic;font-family:'Playfair Display',serif;font-size:18px;grid-column:1/-1;display:none}
+.cta{max-width:680px;margin:50px auto 0;padding:0 20px}
+.cta-box{background:linear-gradient(135deg,var(--capucine),var(--capucine-fonce));border-radius:24px;padding:38px 32px;text-align:center;color:#fff}
+.cta-box .eyebrow{font-size:11px;letter-spacing:.24em;text-transform:uppercase;opacity:.85;margin-bottom:12px}
+.cta-box h2{font-family:'Playfair Display',serif;font-weight:600;font-size:26px;line-height:1.25;margin-bottom:12px}
+.cta-box p{font-size:15px;opacity:.95;max-width:42ch;margin:0 auto 22px;line-height:1.55}
+.cta-btn{display:inline-block;background:#fff;color:var(--capucine-fonce);font-weight:600;font-size:15px;padding:15px 32px;border-radius:99px;text-decoration:none;transition:transform .16s}
+.cta-btn:hover{transform:translateY(-2px)}
+footer{text-align:center;margin-top:40px;font-family:'Playfair Display',serif;font-style:italic;color:var(--capucine-fonce);font-size:16px}
+@media(max-width:520px){.grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}.card-ill{height:90px}.card-ill svg{width:48px;height:48px}.card-title{font-size:16px}}
+</style>
+</head>
+<body>
+<div class="topband"></div>
+<header>
+  <div class="brand">NutriWell</div>
+  <div class="brand-sub">by Clémence</div>
+  <h1>Ma <em>bibliothèque</em> de recettes</h1>
+  <div class="flower">✿ ✿ ✿</div>
+  <p class="subtitle">Gourmandes, rassasiantes, et pensées pour ta vraie vie. Trouve en quelques secondes ce qui te fait envie.</p>
+</header>
+
+<div class="controls">
+  <div class="search-wrap">
+    <input type="text" id="search" placeholder="Rechercher une recette…">
+  </div>
+  <div class="filters" id="filters">
+    <button class="filter active" data-f="all">Tout</button>
+    <button class="filter" data-f="m-petit-dej">Petit-déj</button>
+    <button class="filter" data-f="m-repas">Déjeuner / Dîner</button>
+    <button class="filter" data-f="m-rapide">Rapide</button>
+    <button class="filter" data-f="m-dessert">Collation / Dessert</button>
+    <button class="filter" data-f="t-rapide">⚡ Express</button>
+    <button class="filter" data-f="t-vege">🌱 Végé</button>
+    <button class="filter" data-f="t-famille">👨‍👩‍👧 Famille</button>
+    <button class="filter" data-f="t-batch">🍲 Batch</button>
+    <button class="filter" data-f="t-ete">☀️ Été</button>
+  </div>
+</div>
+
+<div class="count" id="count"></div>
+
+<div class="grid" id="grid">
+
+    <a class="card m-petit-dej t-rapide t-vege" href="pdf/porridge_pomme_cannelle.pdf" target="_blank" data-title="porridge pomme-cannelle">
+      <div class="card-ill"><svg viewBox="0 0 64 64"><circle cx="32" cy="34" r="18" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 34 Q32 50 50 34" fill="none" stroke="currentColor" stroke-width="2"/><path d="M22 24 Q32 18 42 24" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+      <div class="card-body">
+        <div class="card-moment">Petit-déj · 10 min</div>
+        <div class="card-title">Porridge pomme-cannelle</div>
+        <div class="card-tags"><span class="ctag">⚡ Rapide</span><span class="ctag">🌱 Option végé</span></div>
+      </div>
+    </a>
+    <a class="card m-petit-dej t-rapide t-vege" href="pdf/pancakes_proteines_banane.pdf" target="_blank" data-title="pancakes protéinés banane">
+      <div class="card-ill"><svg viewBox="0 0 64 64"><ellipse cx="32" cy="40" rx="18" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><ellipse cx="32" cy="34" rx="18" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><ellipse cx="32" cy="28" rx="18" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M32 22 Q34 16 30 14" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+      <div class="card-body">
+        <div class="card-moment">Petit-déj · 15 min</div>
+        <div class="card-title">Pancakes protéinés banane</div>
+        <div class="card-tags"><span class="ctag">⚡ Rapide</span><span class="ctag">🌱 Option végé</span></div>
+      </div>
+    </a>
+    <a class="card m-petit-dej t-rapide t-vege" href="pdf/bowl_skyr_granola.pdf" target="_blank" data-title="bowl skyr, granola & fruits rouges">
+      <div class="card-ill"><svg viewBox="0 0 64 64"><circle cx="32" cy="34" r="18" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 34 Q32 50 50 34" fill="none" stroke="currentColor" stroke-width="2"/><path d="M22 24 Q32 18 42 24" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+      <div class="card-body">
+        <div class="card-moment">Petit-déj · 5 min</div>
+        <div class="card-title">Bowl skyr, granola & fruits rouges</div>
+        <div class="card-tags"><span class="ctag">⚡ Rapide</span><span class="ctag">🌱 Option végé</span></div>
+      </div>
+    </a>
+    <a class="card m-repas t-rapide t-famille" href="pdf/poulet_cremeux_epinards.pdf" target="_blank" data-title="poulet crémeux épinards & parmesan">
+      <div class="card-ill"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="19" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="32" cy="32" r="11" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+      <div class="card-body">
+        <div class="card-moment">Déjeuner / Dîner · 20 min</div>
+        <div class="card-title">Poulet crémeux épinards & parmesan</div>
+        <div class="card-tags"><span class="ctag">⚡ Rapide</span><span class="ctag">👨‍👩‍👧 Famille</span></div>
+      </div>
+    </a>
+    <a class="card m-repas t-famille" href="pdf/saumon_patate_douce.pdf" target="_blank" data-title="saumon rôti, patate douce & brocoli">
+      <div class="card-ill"><svg viewBox="0 0 64 64"><path d="M14 32 Q26 20 44 32 Q26 44 14 32Z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M44 32 L52 26 L52 38Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="22" cy="30" r="1.5" fill="currentColor"/></svg></div>
+      <div class="card-body">
+        <div class="card-moment">Déjeuner / Dîner · 25 min</div>
+        <div class="card-title">Saumon rôti, patate douce & brocoli</div>
+        <div class="card-tags"><span class="ctag">👨‍👩‍👧 Famille</span></div>
+      </div>
+    </a>
+    <a class="card m-repas t-vege" href="pdf/dahl_lentilles_corail.pdf" target="_blank" data-title="dahl de lentilles corail au coco">
+      <div class="card-ill"><svg viewBox="0 0 64 64"><path d="M18 28 L46 28 L44 48 L20 48Z" fill="none" stroke="currentColor" stroke-width="2"/><line x1="14" y1="28" x2="50" y2="28" stroke="currentColor" stroke-width="2"/><path d="M26 22 Q32 16 38 22" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+      <div class="card-body">
+        <div class="card-moment">Déjeuner / Dîner · 25 min</div>
+        <div class="card-title">Dahl de lentilles corail au coco</div>
+        <div class="card-tags"><span class="ctag">🌱 Option végé</span></div>
+      </div>
+    </a>
+    <a class="card m-repas t-vege" href="pdf/buddha_bowl_pois_chiches.pdf" target="_blank" data-title="buddha bowl pois chiches & tahini">
+      <div class="card-ill"><svg viewBox="0 0 64 64"><circle cx="32" cy="34" r="18" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 34 Q32 50 50 34" fill="none" stroke="currentColor" stroke-width="2"/><path d="M22 24 Q32 18 42 24" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+      <div class="card-body">
+        <div class="card-moment">Déjeuner / Dîner · 25 min</div>
+        <div class="card-title">Buddha bowl pois chiches & tahini</div>
+        <div class="card-tags"><span class="ctag">🌱 Option végé</span></div>
+      </div>
+    </a>
+    <a class="card m-repas t-rapide t-famille t-vege" href="pdf/wok_boeuf_nouilles.pdf" target="_blank" data-title="wok de bœuf, nouilles & légumes">
+      <div class="card-ill"><svg viewBox="0 0 64 64"><path d="M14 30 Q32 52 50 30" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12" y1="30" x2="52" y2="30" stroke="currentColor" stroke-width="2"/><line x1="50" y1="30" x2="58" y2="26" stroke="currentColor" stroke-width="2"/></svg></div>
+      <div class="card-body">
+        <div class="card-moment">Déjeuner / Dîner · 20 min</div>
+        <div class="card-title">Wok de bœuf, nouilles & légumes</div>
+        <div class="card-tags"><span class="ctag">⚡ Rapide</span><span class="ctag">👨‍👩‍👧 Famille</span><span class="ctag">🌱 Option végé</span></div>
+      </div>
+    </a>
+    <a class="card m-rapide t-rapide t-vege" href="pdf/omelette_feta_epinards.pdf" target="_blank" data-title="omelette express feta & épinards">
+      <div class="card-ill"><svg viewBox="0 0 64 64"><ellipse cx="32" cy="34" rx="16" ry="12" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="32" cy="34" r="6" fill="none" stroke="currentColor" stroke-width="2"/></svg></div>
+      <div class="card-body">
+        <div class="card-moment">Rapide · 10 min</div>
+        <div class="card-title">Omelette express feta & épinards</div>
+        <div class="card-tags"><span class="ctag">⚡ Rapide</span><span class="ctag">🌱 Option végé</span></div>
+      </div>
+    </a>
+    <a class="card m-rapide t-rapide t-vege" href="pdf/wrap_poulet_avocat.pdf" target="_blank" data-title="wrap poulet-avocat & crudités">
+      <div class="card-ill"><svg viewBox="0 0 64 64"><path d="M22 16 L42 16 L46 48 L18 48Z" fill="none" stroke="currentColor" stroke-width="2"/><line x1="26" y1="24" x2="38" y2="24" stroke="currentColor" stroke-width="1.5"/><line x1="25" y1="32" x2="39" y2="32" stroke="currentColor" stroke-width="1.5"/></svg></div>
+      <div class="card-body">
+        <div class="card-moment">Rapide · 12 min</div>
+        <div class="card-title">Wrap poulet-avocat & crudités</div>
+        <div class="card-tags"><span class="ctag">⚡ Rapide</span><span class="ctag">🌱 Option végé</span></div>
+      </div>
+    </a>
+    <a class="card m-dessert t-vege t-batch" href="pdf/energy_balls_dattes.pdf" target="_blank" data-title="energy balls dattes-amandes-cacao">
+      <div class="card-ill"><svg viewBox="0 0 64 64"><circle cx="24" cy="36" r="8" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="40" cy="36" r="8" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="32" cy="24" r="8" fill="none" stroke="currentColor" stroke-width="2"/></svg></div>
+      <div class="card-body">
+        <div class="card-moment">Collation / Dessert · 15 min</div>
+        <div class="card-title">Energy balls dattes-amandes-cacao</div>
+        <div class="card-tags"><span class="ctag">🌱 Option végé</span><span class="ctag">🍲 Batch</span></div>
+      </div>
+    </a>
+    <a class="card m-dessert t-rapide t-vege" href="pdf/fromage_blanc_compotee.pdf" target="_blank" data-title="fromage blanc, compotée & noix">
+      <div class="card-ill"><svg viewBox="0 0 64 64"><circle cx="32" cy="34" r="18" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 34 Q32 50 50 34" fill="none" stroke="currentColor" stroke-width="2"/><path d="M22 24 Q32 18 42 24" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+      <div class="card-body">
+        <div class="card-moment">Collation / Dessert · 8 min</div>
+        <div class="card-title">Fromage blanc, compotée & noix</div>
+        <div class="card-tags"><span class="ctag">⚡ Rapide</span><span class="ctag">🌱 Option végé</span></div>
+      </div>
+    </a>
+    <a class="card m-dessert t-rapide t-vege" href="pdf/mousse_chocolat_skyr.pdf" target="_blank" data-title="mousse chocolat-skyr express">
+      <div class="card-ill"><svg viewBox="0 0 64 64"><rect x="20" y="20" width="24" height="28" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><line x1="32" y1="20" x2="32" y2="48" stroke="currentColor" stroke-width="1.5"/><line x1="20" y1="34" x2="44" y2="34" stroke="currentColor" stroke-width="1.5"/></svg></div>
+      <div class="card-body">
+        <div class="card-moment">Collation / Dessert · 5 min</div>
+        <div class="card-title">Mousse chocolat-skyr express</div>
+        <div class="card-tags"><span class="ctag">⚡ Rapide</span><span class="ctag">🌱 Option végé</span></div>
+      </div>
+    </a>
+    <a class="card m-repas t-vege t-batch" href="pdf/chili_sin_carne.pdf" target="_blank" data-title="chili sin carne haricots rouges">
+      <div class="card-ill"><svg viewBox="0 0 64 64"><path d="M18 28 L46 28 L44 48 L20 48Z" fill="none" stroke="currentColor" stroke-width="2"/><line x1="14" y1="28" x2="50" y2="28" stroke="currentColor" stroke-width="2"/><path d="M26 22 Q32 16 38 22" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+      <div class="card-body">
+        <div class="card-moment">Déjeuner / Dîner · 35 min</div>
+        <div class="card-title">Chili sin carne haricots rouges</div>
+        <div class="card-tags"><span class="ctag">🌱 Option végé</span><span class="ctag">🍲 Batch</span></div>
+      </div>
+    </a>
+    <a class="card m-petit-dej t-vege t-batch" href="pdf/muffins_oeufs_legumes.pdf" target="_blank" data-title="muffins œufs & légumes">
+      <div class="card-ill"><svg viewBox="0 0 64 64"><ellipse cx="32" cy="34" rx="16" ry="12" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="32" cy="34" r="6" fill="none" stroke="currentColor" stroke-width="2"/></svg></div>
+      <div class="card-body">
+        <div class="card-moment">Petit-déj · 30 min</div>
+        <div class="card-title">Muffins œufs & légumes</div>
+        <div class="card-tags"><span class="ctag">🌱 Option végé</span><span class="ctag">🍲 Batch</span></div>
+      </div>
+    </a>
+    <a class="card m-repas t-ete t-vege" href="pdf/salade_poulet_quinoa.pdf" target="_blank" data-title="salade fraîcheur poulet-quinoa">
+      <div class="card-ill"><svg viewBox="0 0 64 64"><path d="M14 32 Q32 52 50 32" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 30 Q24 22 30 28 Q34 20 40 28 Q44 24 46 30" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+      <div class="card-body">
+        <div class="card-moment">Déjeuner / Dîner · 20 min</div>
+        <div class="card-title">Salade fraîcheur poulet-quinoa</div>
+        <div class="card-tags"><span class="ctag">☀️ Été</span><span class="ctag">🌱 Option végé</span></div>
+      </div>
+    </a>
+    <a class="card m-repas t-ete t-vege" href="pdf/gaspacho_oeuf_poche.pdf" target="_blank" data-title="gaspacho & œuf poché">
+      <div class="card-ill"><svg viewBox="0 0 64 64"><ellipse cx="32" cy="34" rx="18" ry="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 34 Q32 46 50 34" fill="none" stroke="currentColor" stroke-width="2"/><path d="M28 22 Q30 26 28 30 M36 22 Q38 26 36 30" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+      <div class="card-body">
+        <div class="card-moment">Déjeuner / Dîner · 15 min</div>
+        <div class="card-title">Gaspacho & œuf poché</div>
+        <div class="card-tags"><span class="ctag">☀️ Été</span><span class="ctag">🌱 Option végé</span></div>
+      </div>
+    </a>
+    <a class="card m-dessert t-ete t-vege" href="pdf/nice_cream_banane.pdf" target="_blank" data-title="nice cream banane & fruits rouges">
+      <div class="card-ill"><svg viewBox="0 0 64 64"><path d="M24 26 L40 26 L32 50Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="32" cy="22" r="8" fill="none" stroke="currentColor" stroke-width="2"/></svg></div>
+      <div class="card-body">
+        <div class="card-moment">Collation / Dessert · 5 min</div>
+        <div class="card-title">Nice cream banane & fruits rouges</div>
+        <div class="card-tags"><span class="ctag">☀️ Été</span><span class="ctag">🌱 Option végé</span></div>
+      </div>
+    </a>
+  <div class="noresult" id="noresult">Aucune recette ne correspond… essaie un autre filtre ✿</div>
+</div>
+
+<div class="cta">
+  <div class="cta-box">
+    <div class="eyebrow">Pas encore accompagnée ?</div>
+    <h2>Ces recettes sont pensées pour toutes.<br>Ton métabolisme, lui, est unique.</h2>
+    <p>Pour un plan calibré sur TES besoins précis — pas des recettes génériques — on se parle. C'est offert, et ça peut tout changer.</p>
+    <a class="cta-btn" href="https://api.leadconnectorhq.com/widget/booking/LDKr3AhhrPNw4bPSvs29" target="_blank">Réserver mon appel ✿</a>
+  </div>
+</div>
+
+<footer>On se régale, sans se priver. ✿</footer>
+
+<script>
+const search=document.getElementById('search');
+const filters=document.getElementById('filters');
+const cards=[...document.querySelectorAll('.card')];
+const count=document.getElementById('count');
+const noresult=document.getElementById('noresult');
+let activeFilter='all';
+
+function apply(){
+  const q=search.value.trim().toLowerCase();
+  let visible=0;
+  cards.forEach(c=>{
+    const matchFilter = activeFilter==='all' || c.classList.contains(activeFilter);
+    const matchSearch = !q || c.dataset.title.includes(q);
+    if(matchFilter && matchSearch){c.classList.remove('hidden');visible++;}
+    else{c.classList.add('hidden');}
+  });
+  count.textContent = visible+' recette'+(visible>1?'s':'');
+  noresult.style.display = visible===0?'block':'none';
+}
+
+filters.addEventListener('click',e=>{
+  if(!e.target.classList.contains('filter'))return;
+  document.querySelectorAll('.filter').forEach(f=>f.classList.remove('active'));
+  e.target.classList.add('active');
+  activeFilter=e.target.dataset.f;
+  apply();
+});
+search.addEventListener('input',apply);
+apply();
+</script>
+</body>
+</html>
