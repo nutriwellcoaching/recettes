@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ma bibliothèque de recettes — NutriWell</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,500&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --capucine:#DB6350;--capucine-fonce:#B84F3F;--ballerine:#ECB5B0;
+  --ballerine-soft:#F8E5E2;--creme:#FAF7F5;--brun:#2D2326;--brun-moyen:#6b5d60;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Open Sans',sans-serif;background:radial-gradient(120% 40% at 50% 0%,var(--ballerine-soft) 0%,var(--creme) 55%);color:var(--brun);min-height:100vh;padding-bottom:40px}
+.topband{height:8px;background:linear-gradient(90deg,var(--ballerine),var(--capucine),var(--capucine-fonce))}
+header{text-align:center;padding:42px 20px 10px}
+.brand{font-family:'Playfair Display',serif;font-weight:700;color:var(--capucine);font-size:14px;letter-spacing:.34em;text-transform:uppercase}
+.brand-sub{font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:var(--brun-moyen);margin-top:4px}
+h1{font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(34px,7vw,50px);margin:18px 0 6px;letter-spacing:-.5px}
+h1 em{color:var(--capucine);font-style:italic}
+.flower{color:var(--ballerine);font-size:15px;letter-spacing:.5em;margin-bottom:8px}
+.subtitle{font-size:15px;color:var(--brun-moyen);max-width:46ch;margin:0 auto}
+.controls{max-width:1100px;margin:28px auto 0;padding:0 20px}
+.search-wrap{position:relative;max-width:440px;margin:0 auto 20px}
+#search{width:100%;border:1.5px solid var(--ballerine);background:#fff;border-radius:99px;padding:14px 20px 14px 46px;font-family:inherit;font-size:15px;color:var(--brun)}
+#search:focus{outline:none;border-color:var(--capucine)}
+.search-wrap::before{content:"⌕";position:absolute;left:18px;top:50%;transform:translateY(-50%);color:var(--capucine);font-size:22px}
+.filters{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
+.filter{background:#fff;border:1.5px solid var(--ballerine-soft);color:var(--brun-moyen);font-family:inherit;font-size:13.5px;font-weight:600;padding:9px 16px;border-radius:99px;cursor:pointer;transition:all .16s}
+.filter:hover{border-color:var(--ballerine)}
+.filter.active{background:var(--capucine);color:#fff;border-color:var(--capucine)}
+.count{text-align:center;font-size:13px;color:var(--brun-moyen);margin:22px 0 6px;letter-spacing:.04em}
+.grid{max-width:1100px;margin:8px auto 0;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px}
+.card{background:#fff;border-radius:18px;overflow:hidden;text-decoration:none;color:inherit;box-shadow:0 12px 30px -22px rgba(184,79,63,.5);transition:transform .16s,box-shadow .16s;display:flex;flex-direction:column;border:1px solid #fff}
+.card:hover{transform:translateY(-4px);box-shadow:0 20px 40px -22px rgba(184,79,63,.6);border-color:var(--ballerine-soft)}
+.card-ill{background:linear-gradient(135deg,var(--ballerine-soft),#fff);height:120px;display:flex;align-items:center;justify-content:center;color:var(--capucine)}
+.card-ill svg{width:64px;height:64px}
+.card-body{padding:16px 18px 18px}
+.card-moment{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--capucine);font-weight:600;margin-bottom:5px}
+.card-title{font-family:'Playfair Display',serif;font-weight:600;font-size:19px;line-height:1.2;color:var(--brun);margin-bottom:10px}
+.card-tags{display:flex;flex-wrap:wrap;gap:5px}
+.ctag{font-size:10.5px;color:var(--brun-moyen);background:var(--creme);padding:3px 8px;border-radius:20px}
+.hidden{display:none}
+.noresult{text-align:center;color:var(--brun-moyen);padding:50px 20px;font-style:italic;font-family:'Playfair Display',serif;font-size:18px;grid-column:1/-1;display:none}
+.cta{max-width:680px;margin:50px auto 0;padding:0 20px}
+.cta-box{background:linear-gradient(135deg,var(--capucine),var(--capucine-fonce));border-radius:24px;padding:38px 32px;text-align:center;color:#fff}
+.cta-box .eyebrow{font-size:11px;letter-spacing:.24em;text-transform:uppercase;opacity:.85;margin-bottom:12px}
+.cta-box h2{font-family:'Playfair Display',serif;font-weight:600;font-size:26px;line-height:1.25;margin-bottom:12px}
+.cta-box p{font-size:15px;opacity:.95;max-width:42ch;margin:0 auto 22px;line-height:1.55}
+.cta-btn{display:inline-block;background:#fff;color:var(--capucine-fonce);font-weight:600;font-size:15px;padding:15px 32px;border-radius:99px;text-decoration:none;transition:transform .16s}
+.cta-btn:hover{transform:translateY(-2px)}
+footer{text-align:center;margin-top:40px;font-family:'Playfair Display',serif;font-style:italic;color:var(--capucine-fonce);font-size:16px}
+@media(max-width:520px){.grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}.card-ill{height:90px}.card-ill svg{width:48px;height:48px}.card-title{font-size:16px}}
+</style>
+</head>
+<body>
+
+<!--
+=====================================================================
+  ✿ MES RECETTES — C'EST ICI QU'ON AJOUTE ✿
+=====================================================================
+
+  POUR AJOUTER UNE RECETTE :
+  1. Déposer le PDF dans le dossier (même niveau que index.html)
+  2. Copier une ligne ci-dessous, la coller à la suite
+  3. Modifier : le titre, le nom du fichier PDF (sans .pdf), et les infos
+
+  LES CHAMPS :
+    t     = le titre affiché
+    f     = le nom du fichier PDF, SANS le ".pdf"
+    moment= "petit-dej" | "repas" | "rapide" | "dessert"
+    time  = le temps affiché, ex "20 min"
+    tags  = au choix : "rapide" "vege" "famille" "batch" "ete"
+    ill   = le dessin, au choix :
+            bol, bol2, pancake, assiette, poisson, cocotte, wok,
+            oeuf, wrap, boules, chocolat, salade, soupe, glace,
+            toast, bocal, legume, pizza, skewer, dip
+
+  ⚠️ Ne pas oublier la virgule à la fin de chaque ligne !
+=====================================================================
+-->
+<script>
+const RECETTES = [
+  {t:"Porridge pomme-cannelle", f:"porridge_pomme_cannelle", moment:"petit-dej", time:"10 min", tags:["dej","rapide","vege"], ill:"bol"},
+  {t:"Pancakes protéinés banane", f:"pancakes_proteines_banane", moment:"petit-dej", time:"15 min", tags:["dej","rapide","vege"], ill:"pancake"},
+  {t:"Bowl skyr, granola & fruits rouges", f:"bowl_skyr_granola", moment:"petit-dej", time:"5 min", tags:["dej","rapide","vege"], ill:"bol"},
+  {t:"Poulet crémeux épinards & parmesan", f:"poulet_cremeux_epinards", moment:"repas", time:"20 min", tags:["rapide","famille"], ill:"assiette"},
+  {t:"Saumon rôti, patate douce & brocoli", f:"saumon_patate_douce", moment:"repas", time:"25 min", tags:["famille"], ill:"poisson"},
+  {t:"Dahl de lentilles corail au coco", f:"dahl_lentilles_corail", moment:"repas", time:"25 min", tags:["vege"], ill:"cocotte"},
+  {t:"Buddha bowl pois chiches & tahini", f:"buddha_bowl_pois_chiches", moment:"repas", time:"25 min", tags:["vege"], ill:"bol"},
+  {t:"Wok de bœuf, nouilles & légumes", f:"wok_boeuf_nouilles", moment:"repas", time:"20 min", tags:["rapide","famille","vege"], ill:"wok"},
+  {t:"Omelette express feta & épinards", f:"omelette_feta_epinards", moment:"rapide", time:"10 min", tags:["rapide","vege"], ill:"oeuf"},
+  {t:"Wrap poulet-avocat & crudités", f:"wrap_poulet_avocat", moment:"rapide", time:"12 min", tags:["rapide","vege"], ill:"assiette2"},
+  {t:"Energy balls dattes-amandes-cacao", f:"energy_balls_dattes", moment:"dessert", time:"15 min", tags:["vege","batch"], ill:"boules"},
+  {t:"Fromage blanc, compotée & noix", f:"fromage_blanc_compotee", moment:"dessert", time:"8 min", tags:["rapide","vege"], ill:"bol"},
+  {t:"Mousse chocolat-skyr express", f:"mousse_chocolat_skyr", moment:"dessert", time:"5 min", tags:["rapide","vege"], ill:"chocolat"},
+  {t:"Chili sin carne haricots rouges", f:"chili_sin_carne", moment:"repas", time:"35 min", tags:["vege","batch"], ill:"cocotte"},
+  {t:"Muffins œufs & légumes", f:"muffins_oeufs_legumes", moment:"petit-dej", time:"30 min", tags:["dej","vege","batch"], ill:"oeuf"},
+  {t:"Salade fraîcheur poulet-quinoa", f:"salade_poulet_quinoa", moment:"repas", time:"20 min", tags:["ete","vege"], ill:"assiette3"},
+  {t:"Gaspacho & œuf poché", f:"gaspacho_oeuf_poche", moment:"repas", time:"15 min", tags:["ete","vege"], ill:"soupe"},
+  {t:"Nice cream banane & fruits rouges", f:"nice_cream_banane", moment:"dessert", time:"5 min", tags:["ete","vege"], ill:"glace"},
+  {t:"Pain perdu protéiné", f:"pain_perdu_proteine", moment:"petit-dej", time:"10 min", tags:["dej","rapide","vege"], ill:"pancake2"},
+  {t:"Overnight oats chocolat-noisette", f:"overnight_oats_choco_noisette", moment:"petit-dej", time:"5 min", tags:["dej","vege","batch"], ill:"bocal"},
+  {t:"Toast ricotta, miel & noix", f:"toast_ricotta_miel", moment:"dessert", time:"5 min", tags:["rapide","vege"], ill:"toast"},
+  {t:"Smoothie bowl mangue-coco", f:"smoothie_bowl_mangue_coco", moment:"dessert", time:"5 min", tags:["ete","vege","rapide"], ill:"bol"},
+  {t:"Salade lentilles, feta & menthe", f:"salade_lentilles_feta", moment:"repas", time:"15 min", tags:["ete","vege"], ill:"assiette3"},
+  {t:"Wrap frais thon & crudités", f:"wrap_frais_thon", moment:"repas", time:"10 min", tags:["ete","rapide","vege"], ill:"assiette2"},
+  {t:"Courgettes farcies express", f:"courgettes_farcies_express", moment:"repas", time:"25 min", tags:["ete","famille","vege"], ill:"legume"},
+  {t:"Poke bowl saumon & avocat", f:"poke_bowl_saumon", moment:"repas", time:"15 min", tags:["ete","vege"], ill:"poisson"},
+  {t:"Le burger maison NutriWell", f:"burger_maison", moment:"repas", time:"25 min", tags:["famille","vege"], ill:"assiette"},
+  {t:"La pizza maison qui rassasie", f:"pizza_maison", moment:"repas", time:"30 min", tags:["famille","vege"], ill:"pizza"},
+  {t:"Wraps croustillants façon tacos", f:"tacos_croustillants", moment:"repas", time:"20 min", tags:["rapide","famille","vege"], ill:"wrap"},
+  {t:"Gratin de pâtes crémeux", f:"gratin_pates_cremeux", moment:"repas", time:"30 min", tags:["famille","batch","vege"], ill:"cocotte"},
+  {t:"Brochettes marinées au barbecue", f:"brochettes_barbecue", moment:"repas", time:"20 min", tags:["ete","famille","vege"], ill:"skewer"},
+  {t:"Salade de pommes de terre légère", f:"salade_pdt_barbecue", moment:"repas", time:"25 min", tags:["ete","vege","batch"], ill:"salade"},
+  {t:"Houmous maison & bâtonnets", f:"houmous_maison", moment:"dessert", time:"10 min", tags:["vege"], ill:"dip"},
+  {t:"Dips frais façon tzatziki", f:"dips_tzatziki", moment:"dessert", time:"10 min", tags:["ete","vege","rapide"], ill:"dip"},
+];
+</script>
+
+<div class="topband"></div>
+<header>
+  <div class="brand">NutriWell</div>
+  <div class="brand-sub">by Clémence</div>
+  <h1>Ma <em>bibliothèque</em> de recettes</h1>
+  <div class="flower">✿ ✿ ✿</div>
+  <p class="subtitle">Gourmandes, rassasiantes, et pensées pour ta vraie vie. Trouve en quelques secondes ce qui te fait envie.</p>
+</header>
+
+<div class="controls">
+  <div class="search-wrap">
+    <input type="text" id="search" placeholder="Rechercher une recette…">
+  </div>
+  <div class="filters" id="filters">
+    <button class="filter active" data-f="all">Tout</button>
+    <button class="filter" data-f="m-petit-dej">Petit-déj</button>
+    <button class="filter" data-f="m-repas">Déjeuner / Dîner</button>
+    <button class="filter" data-f="m-rapide">Rapide</button>
+    <button class="filter" data-f="m-dessert">Collation / Dessert</button>
+    <button class="filter" data-f="t-rapide">⚡ Express</button>
+    <button class="filter" data-f="t-vege">🌱 Végé</button>
+    <button class="filter" data-f="t-famille">👨‍👩‍👧 Famille</button>
+    <button class="filter" data-f="t-batch">🍲 Batch</button>
+    <button class="filter" data-f="t-ete">☀️ Été</button>
+  </div>
+</div>
+
+<div class="count" id="count"></div>
+<div class="grid" id="grid">
+  <div class="noresult" id="noresult">Aucune recette ne correspond… essaie un autre filtre ✿</div>
+</div>
+
+<div class="cta">
+  <div class="cta-box">
+    <div class="eyebrow">Pas encore accompagnée ?</div>
+    <h2>Ces recettes sont pensées pour toutes.<br>Ton métabolisme, lui, est unique.</h2>
+    <p>Pour un plan calibré sur TES besoins précis — pas des recettes génériques — on se parle. C'est offert, et ça peut tout changer.</p>
+    <a class="cta-btn" href="https://api.leadconnectorhq.com/widget/booking/LDKr3AhhrPNw4bPSvs29" target="_blank">Réserver mon appel ✿</a>
+  </div>
+</div>
+
+<footer>On se régale, sans se priver. ✿</footer>
+
+<script>
+const ILL = {
+  "assiette": '<circle cx="32" cy="32" r="19" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="32" cy="32" r="11" fill="none" stroke="currentColor" stroke-width="1.5"/>',
+  "assiette2": '<path d="M22 16 L42 16 L46 48 L18 48Z" fill="none" stroke="currentColor" stroke-width="2"/><line x1="26" y1="24" x2="38" y2="24" stroke="currentColor" stroke-width="1.5"/><line x1="25" y1="32" x2="39" y2="32" stroke="currentColor" stroke-width="1.5"/>',
+  "assiette3": '<path d="M14 32 Q32 52 50 32" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 30 Q24 22 30 28 Q34 20 40 28 Q44 24 46 30" fill="none" stroke="currentColor" stroke-width="1.5"/>',
+  "bocal": '<path d="M22 22 L42 22 L44 48 L20 48Z" fill="none" stroke="currentColor" stroke-width="2"/><line x1="20" y1="28" x2="44" y2="28" stroke="currentColor" stroke-width="1.5"/><path d="M26 16 L38 16 L38 22 L26 22Z" fill="none" stroke="currentColor" stroke-width="2"/>',
+  "bol": '<circle cx="32" cy="34" r="18" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 34 Q32 50 50 34" fill="none" stroke="currentColor" stroke-width="2"/><path d="M22 24 Q32 18 42 24" fill="none" stroke="currentColor" stroke-width="1.5"/>',
+  "boules": '<circle cx="24" cy="36" r="8" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="40" cy="36" r="8" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="32" cy="24" r="8" fill="none" stroke="currentColor" stroke-width="2"/>',
+  "chocolat": '<rect x="20" y="20" width="24" height="28" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><line x1="32" y1="20" x2="32" y2="48" stroke="currentColor" stroke-width="1.5"/><line x1="20" y1="34" x2="44" y2="34" stroke="currentColor" stroke-width="1.5"/>',
+  "cocotte": '<path d="M18 28 L46 28 L44 48 L20 48Z" fill="none" stroke="currentColor" stroke-width="2"/><line x1="14" y1="28" x2="50" y2="28" stroke="currentColor" stroke-width="2"/><path d="M26 22 Q32 16 38 22" fill="none" stroke="currentColor" stroke-width="1.5"/>',
+  "dip": '<path d="M18 30 L46 30 L42 46 L22 46Z" fill="none" stroke="currentColor" stroke-width="2"/><line x1="26" y1="30" x2="26" y2="16" stroke="currentColor" stroke-width="1.5"/><line x1="34" y1="30" x2="34" y2="18" stroke="currentColor" stroke-width="1.5"/>',
+  "glace": '<path d="M24 26 L40 26 L32 50Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="32" cy="22" r="8" fill="none" stroke="currentColor" stroke-width="2"/>',
+  "legume": '<ellipse cx="32" cy="34" rx="10" ry="18" fill="none" stroke="currentColor" stroke-width="2"/><path d="M32 16 Q36 12 40 14" fill="none" stroke="currentColor" stroke-width="1.5"/>',
+  "oeuf": '<ellipse cx="32" cy="34" rx="16" ry="12" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="32" cy="34" r="6" fill="none" stroke="currentColor" stroke-width="2"/>',
+  "pancake": '<ellipse cx="32" cy="40" rx="18" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><ellipse cx="32" cy="34" rx="18" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><ellipse cx="32" cy="28" rx="18" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M32 22 Q34 16 30 14" fill="none" stroke="currentColor" stroke-width="1.5"/>',
+  "pancake2": '<ellipse cx="32" cy="40" rx="18" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><ellipse cx="32" cy="34" rx="18" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><ellipse cx="32" cy="28" rx="18" ry="5" fill="none" stroke="currentColor" stroke-width="2"/>',
+  "pizza": '<path d="M32 14 L50 46 L14 46Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="28" cy="36" r="2.5" fill="currentColor"/><circle cx="38" cy="38" r="2.5" fill="currentColor"/><circle cx="32" cy="27" r="2" fill="currentColor"/>',
+  "plate": '<circle cx="32" cy="32" r="19" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="32" cy="32" r="11" fill="none" stroke="currentColor" stroke-width="1.5"/>',
+  "poisson": '<path d="M14 32 Q26 20 44 32 Q26 44 14 32Z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M44 32 L52 26 L52 38Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="22" cy="30" r="1.5" fill="currentColor"/>',
+  "salade": '<path d="M14 32 Q32 52 50 32" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 30 Q24 22 30 28 Q34 20 40 28 Q44 24 46 30" fill="none" stroke="currentColor" stroke-width="1.5"/>',
+  "skewer": '<line x1="16" y1="48" x2="48" y2="16" stroke="currentColor" stroke-width="2"/><circle cx="24" cy="40" r="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="32" cy="32" r="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="40" cy="24" r="5" fill="none" stroke="currentColor" stroke-width="2"/>',
+  "soupe": '<ellipse cx="32" cy="34" rx="18" ry="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 34 Q32 46 50 34" fill="none" stroke="currentColor" stroke-width="2"/><path d="M28 22 Q30 26 28 30 M36 22 Q38 26 36 30" fill="none" stroke="currentColor" stroke-width="1.5"/>',
+  "toast": '<rect x="16" y="22" width="32" height="24" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M22 30 Q28 26 34 30 Q40 34 44 30" fill="none" stroke="currentColor" stroke-width="1.5"/>',
+  "wok": '<path d="M14 30 Q32 52 50 30" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12" y1="30" x2="52" y2="30" stroke="currentColor" stroke-width="2"/><line x1="50" y1="30" x2="58" y2="26" stroke="currentColor" stroke-width="2"/>',
+  "wrap": '<path d="M22 16 L42 16 L46 48 L18 48Z" fill="none" stroke="currentColor" stroke-width="2"/><line x1="26" y1="24" x2="38" y2="24" stroke="currentColor" stroke-width="1.5"/><line x1="25" y1="32" x2="39" y2="32" stroke="currentColor" stroke-width="1.5"/>',
+};
+const MOMENT_LABEL = {"petit-dej":"Petit-déj","repas":"Déjeuner / Dîner","rapide":"Rapide","dessert":"Collation / Dessert"};
+const TAG_LABEL = {"rapide":"⚡ Rapide","vege":"🌱 Option végé","famille":"👨‍👩‍👧 Famille","batch":"🍲 Batch","ete":"☀️ Été"};
+
+const grid = document.getElementById('grid');
+const noresult = document.getElementById('noresult');
+
+RECETTES.forEach(r => {
+  const a = document.createElement('a');
+  a.className = 'card m-' + r.moment + ' ' + r.tags.map(t => 't-' + t).join(' ');
+  a.href = r.f + '.pdf';
+  a.target = '_blank';
+  a.dataset.title = r.t.toLowerCase();
+  a.innerHTML =
+    '<div class="card-ill"><svg viewBox="0 0 64 64">' + (ILL[r.ill] || ILL['bol']) + '</svg></div>' +
+    '<div class="card-body">' +
+      '<div class="card-moment">' + MOMENT_LABEL[r.moment] + ' · ' + r.time + '</div>' +
+      '<div class="card-title">' + r.t + '</div>' +
+      '<div class="card-tags">' + r.tags.map(t => '<span class="ctag">' + TAG_LABEL[t] + '</span>').join('') + '</div>' +
+    '</div>';
+  grid.insertBefore(a, noresult);
+});
+
+const search = document.getElementById('search');
+const filters = document.getElementById('filters');
+const count = document.getElementById('count');
+let activeFilter = 'all';
+
+function apply() {
+  const q = search.value.trim().toLowerCase();
+  let visible = 0;
+  document.querySelectorAll('.card').forEach(c => {
+    const mF = activeFilter === 'all' || c.classList.contains(activeFilter);
+    const mS = !q || c.dataset.title.includes(q);
+    if (mF && mS) { c.classList.remove('hidden'); visible++; }
+    else { c.classList.add('hidden'); }
+  });
+  count.textContent = visible + ' recette' + (visible > 1 ? 's' : '');
+  noresult.style.display = visible === 0 ? 'block' : 'none';
+}
+
+filters.addEventListener('click', e => {
+  if (!e.target.classList.contains('filter')) return;
+  document.querySelectorAll('.filter').forEach(f => f.classList.remove('active'));
+  e.target.classList.add('active');
+  activeFilter = e.target.dataset.f;
+  apply();
+});
+search.addEventListener('input', apply);
+apply();
+</script>
+</body>
+</html>
